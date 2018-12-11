@@ -23,7 +23,9 @@
 	</cfoutput>
 	
 	<!---Step 4 - Copy /paste the above 3 lines below this comment--->
- <!---   	<cfset theNum = 'ten' />
+ 	<!--- CF doesn't type juggle / coerce. So you can't add a string and a number'	
+ 
+ 	<cfset theNum = 'ten' />
 	<cfset newNum = theNum + 5 />
 	<cfoutput>
 		<p>The new number is #newNum#</p>
