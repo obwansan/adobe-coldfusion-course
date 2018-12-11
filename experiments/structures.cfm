@@ -21,7 +21,7 @@
 	<cfdump var = "#stUserImplicit#" label = "Implicit Structure">
 	
 	<!---Step 3 - use structDelete() --->
-	<!--- Use ctrl + space to bring up list if structs --->
+	<!--- Use ctrl + space to bring up list of structs --->
 	<cfset structDelete(stUserImplicit, 'age') />
 	
 	<p>Dumping stUser after the deletion of the 'age' key'</p>
