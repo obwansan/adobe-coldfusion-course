@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Untitled Document</title>
+<title>cf Structures</title>
 </head>
 
 <body>
@@ -21,19 +21,21 @@
 	<cfdump var = "#stUserImplicit#" label = "Implicit Structure">
 	
 	<!---Step 3 - use structDelete() --->
-	<!--- Use ctrl + space to bring up list if structs --->
+	<!--- Use ctrl + space to bring up list of structs --->
 	<cfset structDelete(stUserImplicit, 'age') />
 	
 	<p>Dumping stUser after the deletion of the 'age' key'</p>
-	<cfdump var="#stUserImplicit#" label = "Explicit structure after deletion" >
+	<cfdump var="#stUserImplicit#" label = "Explicit structure after age deletion" >
 	
 	<!---Step 4 - use structClear() --->
+	<!--- Deletes all properties from the struct --->
 	<cfset structClear(stUserImplicit) />
 	
 	<p>Dumping stUser after using structClear()</p>
 	<cfdump var="#stUserImplicit#" label = "Explicit Structure after structClear" >
 	
 	<!---Step 5 - use structCount()--->
+	<!--- Counts the properties (elements) in the struct --->
 	<!---	
 	<cfset stCount = structCount(stUser) />
 	<p>stUserImplicit holds <cfdump  var="#stCount#"/> elements</p>
