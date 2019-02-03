@@ -1,3 +1,28 @@
+<!--- Form processing script starts here --->
+
+<!--- If the form has been submitted --->
+<cfif structKeyExists(form, 'fld_newUserSubmit')>
+	<!--- Server-side data validation --->
+	<cfset aErrorMessages = Arraynew(1) />
+	<!--- Validate first name --->
+	<cfif form.fld_userFirstName EQ ''>
+		<cfset arrayAppend(aErrorMessages, 'Please provide a valid first name')>
+	</cfif>
+	<!--- Validate last name --->
+	<cfif form.fld_userLastName EQ ''>
+		<cfset arrayAppend(aErrorMessages, 'Please provide a valid last name')>
+	</cfif>
+	<!--- Validate eMail --->
+	<cfif form.fld_userEmail EQ '' OR NOT isValid('eMail', form.fld_userEmail)>
+		<cfset arrayAppend(aErrorMessages, 'Please provide a valid eMail address')>
+	</cfif>
+	<cfif ArrayisEmpty(aErrorMessages)>
+		
+		<!--- Insert data in database if no error detected --->
+		
+	</cfif>
+</cfif>
+
 <!---Get page content for fld_pageID = 4--->
 <cfquery datasource="hdStreet-final" name="rsPage">
 	SELECT FLD_PAGETITLE, FLD_PAGECONTENT
@@ -57,6 +82,15 @@
 	</div>
 	<div id="calendarSideBar">
 		<h2>Complete the form below to join our band</h2>
+		<cfif isdefined('aErrorMessages') AND NOT ArrayIsEmpty(aErrorMessages)>
+			<cfoutput >
+				<!--- index="message" seems to denote each array element by the term 'message', which can then be used to access / display each
+				      array element. --->
+				<cfloop array="#aErrorMessages#" index="message">
+					<p class="errorMessage">#message#</p>
+				</cfloop>
+			</cfoutput>
+		</cfif>
 		<!--- cfform uses post method by default and posts back to same file/page (so doesn't need a method or action attribute).
 			  When rendered in the browser, <cfform> is turned into the html <form> and the method and post declared. --->
 		<cfform id="frm_newUser">
