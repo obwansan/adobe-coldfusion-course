@@ -4,6 +4,14 @@
 	FROM TBL_PAGES
 	WHERE FLD_PAGEID = 4 AND FLD_PAGEISACTIVE = 1
 </cfquery>
+
+<!--- Get the instruments list to fill the drop down menu of the form --->
+<cfquery datasource="hdstreet" name="rsInstruments">
+	SELECT FLD_INSTRUMENTID, FLD_INSTRUMENTNAME
+	FROM TBL_INSTRUMENTS
+	ORDER BY FLD_INSTRUMENTNAME ASC
+</cfquery>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,39 +57,31 @@
 	</div>
 	<div id="calendarSideBar">
 		<h2>Complete the form below to join our band</h2>
-		<form id="frm_newUser" action="mailto:name@company.com">
+		<!--- cfform uses post method by default and posts back to same file/page (so doesn't need a method or action attribute).
+			  When rendered in the browser, <cfform> is turned into the html <form> and the method and post declared. --->
+		<cfform id="frm_newUser">
 				<fieldset>
 					<legend>Join our band</legend>
 					<dl>
 						<dt><label>First Name</label></dt>
-						<dd><input type="text" name="fld_userFirstName" id="fld_userFirstName" /></dd>
+						<dd><cfinput type="text" name="fld_userFirstName" id="fld_userFirstName" required="true" message="Please enter a first name" /></dd>
 						<dt><label>Last Name</label></dt>
-						<dd><input type="text" name="fld_userLastName" id="fld_userLastName" /></dd>
+						<dd><cfinput type="text" name="fld_userLastName" id="fld_userLastName" required="true" message="Please enter a last name" /></dd>
 						<dt><label>E-mail Address</label></dt>
-						<dd><input  type="text" name="fld_userEmail" id="fld_userEmail" /></dd>
+						<dd><cfinput  type="text" name="fld_userEmail" id="fld_userEmail" required="true" validate="eMail" message="Please enter a valid eMail address" /></dd>
 						<dt><label>Instrument</label></dt>
 						<dd>
-							<select name="fld_userInstrument" id="fld_userInstrument" >
+							<!--- Assigning the query="rsInstruments" attribute to <cfselect> makes it iterate over the SQL query record set and assign the name and ID to each record. --->
+							<cfselect name="fld_userInstrument" id="fld_userInstrument" query="rsInstruments" value="FLD_INSTRUMENTID" display="FLD_INSTRUMENTNAME" queryposition="below">
 								<option value="0">Please choose your instrument</option>
-								<option value="1">Flute</option>
-								<option value="1">Oboe</option>
-								<option value="3">Clarinet</option>
-								<option value="4">Saxophone</option>
-								<option value="5">Trumpet</option>
-								<option value="6">Trombone</option>
-								<option value="7">Tuba</option>
-								<option value="8">String bass</option>
-								<option value="9">Harp</option>
-								<option value="10">Percussion</option>
-								<option value="11">Other</option>
-							</select>
+							</cfselect>
 						</dd>
 						<dt><label>Comment</label></dt>
 						<dd><textarea name="fld_userComment" id="fld_userComment"></textarea></dd>
 					</dl>
 					<input type="submit" name="fld_newUserSubmit" id="fld_newUserSubmit" value="Join the band" />
 				</fieldset>
-			</form>
+			</cfform>
 	</div>
 	</div>
  </div>
