@@ -16,19 +16,21 @@
 	<cfif form.fld_userEmail EQ '' OR NOT isValid('eMail', form.fld_userEmail)>
 		<cfset arrayAppend(aErrorMessages, 'Please provide a valid eMail address')>
 	</cfif>
+	<!--- If no error detected --->
 	<cfif ArrayisEmpty(aErrorMessages)>
 		<!---Generate the missing data --->
 		<cfset form.fld_userPassword = generateSecretKey("AES") />
 		<cfset form.fld_userRole = 1 />
 		<cfset form.fld_userApproved = 0 />
 		<cfset form.fld_userIsActive = 0 />
-		<!--- Insert data in database if no error detected --->
+		<!--- Insert data in database --->
 		<cfquery datasource="hdstreet" >
 			INSERT INTO TBL_USERS
 			(FLD_USERFIRSTNAME, FLD_USERLASTNAME, FLD_USEREMAIL, FLD_USERPASSWORD, FLD_USERCOMMENT, FLD_USERAPPROVED, FLD_USERISACTIVE, FLD_USERROLE, FLD_USERINSTRUMENT)
 			VALUES
 			('#form.fld_userFirstName#', '#form.fld_userLastName#', '#form.fld_userEmail#', '#form.fld_userPassword#', '#form.fld_userComment#', #form.fld_userApproved#, #form.fld_userIsActive#, #form.fld_userRole#, #form.fld_userInstrument#)
 		</cfquery>
+		<cfset userIsInserted = true>
 	</cfif>
 </cfif>
 
@@ -82,19 +84,23 @@
   </div>
   <div id="pageBody">
   	<div id="calendarContent">
-    <!---Erase from here--->
 	<cfoutput>
 		<h1>#rsPage.FLD_PAGETITLE#</h1>
 		#rsPage.FLD_PAGECONTENT#
 	</cfoutput>
-    <!---To here--->
 	</div>
 	<div id="calendarSideBar">
-		<h2>Complete the form below to join our band</h2>
+		<cfif isDefined('userIsInserted')>
+			<h2>Thank you!</h2>
+			<p>Your demand has been correctly submitted. You should hear from us very soon.</p>
+			<p>Enjoy the music.</p>
+			<p>The HD Street staff</p>
+		<cfelse>
+			<h2>Complete the form below to join our band</h2>
 		<cfif isdefined('aErrorMessages') AND NOT ArrayIsEmpty(aErrorMessages)>
 			<cfoutput >
 				<!--- index="message" seems to denote each array element by the term 'message', which can then be used to access / display each
-				      array element. --->
+				      array element (i.e. error message). --->
 				<cfloop array="#aErrorMessages#" index="message">
 					<p class="errorMessage">#message#</p>
 				</cfloop>
@@ -125,6 +131,7 @@
 					<input type="submit" name="fld_newUserSubmit" id="fld_newUserSubmit" value="Join the band" />
 				</fieldset>
 			</cfform>
+		</cfif>
 	</div>
 	</div>
  </div>
